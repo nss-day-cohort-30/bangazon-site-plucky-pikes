@@ -1,7 +1,9 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Bangazon.Models {
-    public class OrderProduct {
+namespace Bangazon.Models
+{
+    public class OrderProduct
+    {
         [Key]
         public int OrderProductId { get; set; }
 
