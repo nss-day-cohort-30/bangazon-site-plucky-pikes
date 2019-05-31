@@ -19,14 +19,17 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-    item.Quantity = item.Products.Count();
-        <tr>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.ProductTypeId">
-                    @Html.DisplayFor(modelItem => item.Label)
-                </a> (@item.Quantity)
-                    <ul>
+        @foreach (var item in Model)
+        {
+            item.Quantity = item.Products.Count();
+            <tr>
+                <td>
+                    <a href=@($"http://localhost:5000/Products/GetProductsByCategory/{item.ProductTypeId}")>@Html.DisplayFor(modelItem => item.Label)
+                    @*asp-route-id="@item.ProductTypeId">*@
+                    @*@Html.DisplayFor(modelItem => item.Label)*@
+                    </a> (@item.Quantity)
+    <ul>
+
 
                         @{
                             foreach (var product in item.Products)
@@ -35,12 +38,13 @@
                             }
                         }
                     </ul>
+
 </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductTypeId">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductTypeId">Delete</a>
-            </td>
-        </tr>
+<td>
+    <a asp-action="Edit" asp-route-id="@item.ProductTypeId">Edit</a> |
+    <a asp-action="Delete" asp-route-id="@item.ProductTypeId">Delete</a>
+</td>
+</tr>
 }
     </tbody>
 </table>
