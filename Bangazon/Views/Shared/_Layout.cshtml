@@ -44,6 +44,16 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li>
+                            <form asp-action="Index" asp-controller="Products" method="get">
+                                <div class="form-actions no-color">
+                                    <p>
+                                        Search Products: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                                        <input type="submit" value="Search" class="btn btn-default" />
+                                    </p>
+                                </div>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>

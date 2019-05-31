@@ -26,15 +26,25 @@ namespace Bangazon.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var applicationDbContext = _context.Product
+            ViewData["CurrentFilter"] = searchString;
+
+            List<Product> productList = await _context.Product
                 .Include(p => p.ProductType)
-                .Include(p => p.User)
-                .OrderByDescending(p=> p.DateCreated)
+                .Include(p => p.User).ToListAsync();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                 productList = productList.Where(p => p.Title.Contains(searchString)
+                                       || p.Description.Contains(searchString)).ToList();
+            } 
+
+            var applicationDbContext = productList
+                .OrderByDescending(p => p.DateCreated)
                 //Shows specified amount
                 .Take(20);
-            return View(await applicationDbContext.ToListAsync());
+
+            return View(applicationDbContext);
         }
 
         public async Task<IActionResult> GetProductsByCategory(int id)
