@@ -26,7 +26,7 @@
                 <td>
                     <a href=@($"http://localhost:5000/Products/GetProductsByCategory/{item.ProductTypeId}")>@Html.DisplayFor(modelItem => item.Label)
                     @*asp-route-id="@item.ProductTypeId">*@
-                    @Html.DisplayFor(modelItem => item.Label)
+                    @*@Html.DisplayFor(modelItem => item.Label)*@
                     </a> (@item.Quantity)
     <ul>
 
