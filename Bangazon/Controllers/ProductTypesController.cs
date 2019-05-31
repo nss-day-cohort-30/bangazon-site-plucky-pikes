@@ -25,7 +25,9 @@ namespace Bangazon.Controllers
             var productTypes = _context.ProductType
                 .Select(pt => new ProductType()
                 {
-                    Products = pt.Products.Take(3).ToList(),
+                    Products = pt.Products
+                    .OrderByDescending(p => p.DateCreated)
+                    .Take(3).ToList(),
                     Label = pt.Label,
                     ProductTypeId = pt.ProductTypeId
                 });
