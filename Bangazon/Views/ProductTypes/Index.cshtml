@@ -30,13 +30,15 @@
                     </a> (@item.Quantity)
     <ul>
 
-        @{
-                        foreach (var product in item.Products)
-            {
-                <li>@Html.DisplayFor(modelItem => product.Title)</li>
-            }
-        }
-    </ul>
+
+                        @{
+                            foreach (var product in item.Products)
+                            {
+                                <li><a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductId">@Html.DisplayFor(modelItem => product.Title)</a></li>
+                            }
+                        }
+                    </ul>
+
 </td>
 <td>
     <a asp-action="Edit" asp-route-id="@item.ProductTypeId">Edit</a> |
