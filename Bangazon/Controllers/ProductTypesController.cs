@@ -36,6 +36,7 @@ namespace Bangazon.Controllers
             }
 
             var productType = await _context.ProductType
+                .Include("Products")
                 .FirstOrDefaultAsync(m => m.ProductTypeId == id);
             if (productType == null)
             {

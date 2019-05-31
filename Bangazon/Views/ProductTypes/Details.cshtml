@@ -17,6 +17,19 @@
             @Html.DisplayFor(model => model.Label)
         </dd>
     </dl>
+    <div>
+        @*<ul>
+
+            @{
+                foreach (var item in Model)
+                {
+                    <li>@Html.DisplayFor(modelItem => product.Title)</li>
+                }
+            }
+        </ul>*@
+
+
+    </div>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ProductTypeId">Edit</a> |
