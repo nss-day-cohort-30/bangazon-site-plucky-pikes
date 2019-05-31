@@ -31,7 +31,7 @@
                         @{
                             foreach (var product in item.Products)
                             {
-                                <li>@Html.DisplayFor(modelItem => product.Title)</li>
+                                <li><a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductId">@Html.DisplayFor(modelItem => product.Title)</a></li>
                             }
                         }
                     </ul>
