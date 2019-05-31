@@ -30,20 +30,21 @@ namespace Bangazon.Controllers
         {
             ViewData["CurrentFilter"] = searchString;
 
+            List<Product> productList = await _context.Product
+                .Include(p => p.ProductType)
+                .Include(p => p.User).ToListAsync();
             if (!String.IsNullOrEmpty(searchString))
             {
-                 var searchedProducts = _context.Product.Where(p => p.Title.Contains(searchString)
-                                       || p.Description.Contains(searchString));
-            }
+                 productList = productList.Where(p => p.Title.Contains(searchString)
+                                       || p.Description.Contains(searchString)).ToList();
+            } 
 
-            var applicationDbContext = _context.Product
-                .Include(p => p.ProductType)
-                .Include(p => p.User)
-                .OrderByDescending(p=> p.DateCreated)
+            var applicationDbContext = productList
+                .OrderByDescending(p => p.DateCreated)
                 //Shows specified amount
                 .Take(20);
 
-            return View(await applicationDbContext.ToListAsync());
+            return View(applicationDbContext);
         }
 
         public async Task<IActionResult> GetProductsByCategory(int id)
