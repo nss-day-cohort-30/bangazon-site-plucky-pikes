@@ -37,6 +37,19 @@ namespace Bangazon.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public async Task<IActionResult> GetProductsByCategory(int id)
+        {
+            var products = _context.Product
+                .Include(p => p.ProductType)
+                .Include(p => p.User)
+                .Where(p => p.ProductTypeId == id);
+            if (products == null)
+            {
+                return NotFound();
+            }
+            return View(await products.ToListAsync());
+        }
+
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
