@@ -48,5 +48,8 @@ namespace Bangazon.Models
 
     public virtual ICollection<OrderProduct> OrderProducts { get; set; }
 
+    // contains true/false setting of if the product is actually available for sale, irrespective of quantity offered
+    //public bool Active { get; set; }
+
   }
 }
