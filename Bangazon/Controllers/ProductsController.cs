@@ -63,15 +63,18 @@ namespace Bangazon.Controllers
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
             }
 
+
             var product = await _context.Product
                 .Include(p => p.ProductType)
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
+
             if (product == null)
             {
                 return NotFound();
@@ -80,6 +83,57 @@ namespace Bangazon.Controllers
             return View(product);
         }
 
+        public async Task<IActionResult> PlaceOrder(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var loggedInUser = await GetCurrentUserAsync();
+
+            Order newOrder = new Order
+            {
+                UserId = loggedInUser.Id.ToString()
+            };
+
+            _context.Order.Add(newOrder);
+            await _context.SaveChangesAsync();
+
+            var newOrderId = newOrder.OrderId;
+
+            var product = await _context.Product
+                .Include(p => p.ProductType)
+                .FirstOrDefaultAsync(m => m.ProductId == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            int numOrdered = _context.OrderProduct.Where(op => op.ProductId == product.ProductId).Count();
+
+
+
+            if  ()
+            {
+                
+
+            }
+
+            OrderProduct ProductOrder = new OrderProduct
+            {
+                OrderId = newOrderId,
+                ProductId = product.ProductId
+            };
+
+            _context.OrderProduct.Add(ProductOrder);
+
+            await _context.SaveChangesAsync();
+
+            product.Quantity -= numOrdered;
+
+            return View("../Orders/Details", newOrder);
+
+        }
         // GET: Products/Create
         public IActionResult Create()
         {
