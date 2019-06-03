@@ -67,8 +67,15 @@ namespace Bangazon.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PaymentTypeId,DateCreated,Description,AccountNumber,UserId")] PaymentType paymentType)
         {
+            ModelState.Remove("PaymentTypeId");
+            ModelState.Remove("UserId");
+            ModelState.Remove("User");
+            ModelState.Remove("DateCreated");
+            var loggedInUser = await GetCurrentUserAsync();
             if (ModelState.IsValid)
             {
+                paymentType.UserId = loggedInUser.Id;
+                paymentType.DateCreated = DateTime.Now;
                 _context.Add(paymentType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
