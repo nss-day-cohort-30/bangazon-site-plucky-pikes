@@ -211,21 +211,26 @@ namespace Bangazon.Controllers
 
             if (product.UserId == loggedInUser.Id)
             {
+                Product freeProduct = null;
                 foreach (var item in _context.OrderProduct)
                 {
-                    if (product.ProductId == item.ProductId)
+                    if (product.ProductId != item.ProductId)
                     {
-                        //error
-                        return View("UserError", product);
-                    }
-                    else
-                    {
-                        _context.Product.Remove(product);
-                        await _context.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index));
+                        freeProduct = product;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                if (freeProduct != null)
+                {
+                    _context.Product.Remove(freeProduct);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(MyProducts));
+                }
+                else
+                {
+                    //error product in order
+                    return View("UserError", product);
+                }
             }
             else
             {

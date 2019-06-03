@@ -15,7 +15,7 @@ namespace Bangazon.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -81,9 +81,9 @@ namespace Bangazon.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "19c53dd5-1abd-43af-8420-620756427dea",
+                            Id = "7b13ba46-a491-4133-876a-8c7c541d5b70",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "68d9d3b2-84e1-4d9b-83ce-e732b7d6f057",
+                            ConcurrencyStamp = "b0831cf9-5409-4161-970c-56e8e2b24404",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Admina",
@@ -91,9 +91,9 @@ namespace Bangazon.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBT1rrryBDbvJe4qsoo2UsCoK2t/h4UIIi3PhgGnfRA8x2yQ+ZjXzh9ueUOj0rwU7A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEN5V9+EAoVbjWNzI3nqQipSkMrndrI5ZNcyQA2Nr+DlF5JItyojg62vZLAeY50KyRQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "23ea2d53-3b7c-4086-bc43-fd66b7be78b0",
+                            SecurityStamp = "9f348531-8372-4c02-b24c-5f83ab0a2da1",
                             StreetAddress = "123 Infinity Way",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com"
@@ -130,7 +130,7 @@ namespace Bangazon.Migrations
                         {
                             OrderId = 1,
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = "19c53dd5-1abd-43af-8420-620756427dea"
+                            UserId = "7b13ba46-a491-4133-876a-8c7c541d5b70"
                         });
                 });
 
@@ -201,7 +201,7 @@ namespace Bangazon.Migrations
                             AccountNumber = "86753095551212",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "American Express",
-                            UserId = "19c53dd5-1abd-43af-8420-620756427dea"
+                            UserId = "7b13ba46-a491-4133-876a-8c7c541d5b70"
                         },
                         new
                         {
@@ -209,7 +209,7 @@ namespace Bangazon.Migrations
                             AccountNumber = "4102948572991",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Discover",
-                            UserId = "19c53dd5-1abd-43af-8420-620756427dea"
+                            UserId = "7b13ba46-a491-4133-876a-8c7c541d5b70"
                         });
                 });
 
@@ -218,8 +218,6 @@ namespace Bangazon.Migrations
                     b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Active");
 
                     b.Property<string>("City");
 
@@ -258,26 +256,24 @@ namespace Bangazon.Migrations
                         new
                         {
                             ProductId = 1,
-                            Active = false,
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "It flies high",
                             Price = 2.9900000000000002,
                             ProductTypeId = 1,
                             Quantity = 100,
                             Title = "Kite",
-                            UserId = "19c53dd5-1abd-43af-8420-620756427dea"
+                            UserId = "7b13ba46-a491-4133-876a-8c7c541d5b70"
                         },
                         new
                         {
                             ProductId = 2,
-                            Active = false,
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "It rolls fast",
                             Price = 29.989999999999998,
                             ProductTypeId = 2,
                             Quantity = 5,
                             Title = "Wheelbarrow",
-                            UserId = "19c53dd5-1abd-43af-8420-620756427dea"
+                            UserId = "7b13ba46-a491-4133-876a-8c7c541d5b70"
                         });
                 });
 
