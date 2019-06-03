@@ -47,6 +47,11 @@
                 <a asp-action="Details" asp-route-id="@item.OrderId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.OrderId">Delete</a>
             </td>
+            <td>
+                <form asp-action="Delete" asp-route-id="@item.OrderId">
+                    <input type="submit" value="Cancel Order" class="btn btn-outline-danger" />
+                </form>
+            </td>
         </tr>
 }
     </tbody>
