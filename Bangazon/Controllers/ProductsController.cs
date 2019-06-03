@@ -91,6 +91,15 @@ namespace Bangazon.Controllers
             }
             var loggedInUser = await GetCurrentUserAsync();
 
+            var isOrder = _context.Order.Where(o => o.UserId == loggedInUser.Id && o.PaymentTypeId == null);
+
+            int? newOrderId = null;
+
+            Order WorkingOrder = null;
+
+            if (isOrder == null)
+            {
+               
             Order newOrder = new Order
             {
                 UserId = loggedInUser.Id.ToString()
@@ -99,8 +108,19 @@ namespace Bangazon.Controllers
             _context.Order.Add(newOrder);
             await _context.SaveChangesAsync();
 
-            var newOrderId = newOrder.OrderId;
+            newOrderId = newOrder.OrderId;
+                WorkingOrder = newOrder;
+            } 
+            else
+            {
+                foreach(Order item in isOrder) {
 
+                    newOrderId = item.OrderId;
+                    WorkingOrder = item;
+                }
+               
+            }
+            
             var product = await _context.Product
                 .Include(p => p.ProductType)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
@@ -111,17 +131,9 @@ namespace Bangazon.Controllers
 
             int numOrdered = _context.OrderProduct.Where(op => op.ProductId == product.ProductId).Count();
 
-
-
-            if  ()
-            {
-                
-
-            }
-
             OrderProduct ProductOrder = new OrderProduct
             {
-                OrderId = newOrderId,
+                OrderId = (int)newOrderId,
                 ProductId = product.ProductId
             };
 
@@ -131,8 +143,8 @@ namespace Bangazon.Controllers
 
             product.Quantity -= numOrdered;
 
-            return View("../Orders/Details", newOrder);
-
+            //return View("../Orders/Details", WorkingOrder);
+            return RedirectToAction("Details", "Products", new { id });
         }
         // GET: Products/Create
         public IActionResult Create()
