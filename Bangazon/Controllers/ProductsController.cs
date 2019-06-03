@@ -216,7 +216,7 @@ namespace Bangazon.Controllers
                     if (product.ProductId == item.ProductId)
                     {
                         //error
-                        return View();
+                        return View("UserError", product);
                     }
                     else
                     {
@@ -230,7 +230,7 @@ namespace Bangazon.Controllers
             else
             {
                 //error
-                return View();
+                return View("UserError", product);
             }
 
         }
