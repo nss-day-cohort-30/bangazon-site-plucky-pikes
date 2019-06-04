@@ -129,8 +129,6 @@ namespace Bangazon.Controllers
                 return NotFound();
             }
 
-            //int numOrdered = _context.OrderProduct.Where(op => op.ProductId == product.ProductId).Count();
-
 
             var productQty = product.Quantity;
 
