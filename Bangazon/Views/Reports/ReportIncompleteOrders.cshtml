@@ -14,7 +14,7 @@
     <ol>
         @foreach (var product in item.OrderProducts)
         {
-            <li>@Html.DisplayFor(modelItem => product.Product.Title) (@Html.DisplayFor(modelItem => product.Product.ProductType.Label)</li>
+            <li>@Html.DisplayFor(modelItem => product.Product.Title) (@Html.DisplayFor(modelItem => product.Product.ProductType.Label))</li>
         }
     </ol>
 }
