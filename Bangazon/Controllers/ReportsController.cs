@@ -31,5 +31,19 @@ namespace Bangazon.Controllers
             var applicationDbContext = _context.Order.Include(o => o.PaymentType).Include(o => o.User);
             return View(await applicationDbContext.ToListAsync());
         }
+        //gets go here
+
+        // GET: Reports/ReportIncompleteOrders
+        public async Task<IActionResult> ReportIncompleteOrders()
+        {
+            var applicationDbContext = _context.Order
+                .Include(o => o.User)
+                .Include(o => o.OrderProducts)
+                .ThenInclude(op => op.Product)
+                .ThenInclude(p => p.ProductType)
+                .Where(item => item.DateCompleted == null)
+                ;
+            return View(await applicationDbContext.ToListAsync());
+        }
     }
 }
