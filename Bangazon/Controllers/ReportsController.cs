@@ -34,7 +34,7 @@ namespace Bangazon.Controllers
                 .Include(o => o.User)
                 .Include(o => o.OrderProducts)
                 .ThenInclude(op => op.Product)
-                //.ThenInclude(p => p.ProductType)
+                .ThenInclude(p => p.ProductType)
                 .Where(item => item.DateCompleted == null)
                 ;
             return View(await applicationDbContext.ToListAsync());
