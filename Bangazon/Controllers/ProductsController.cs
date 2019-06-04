@@ -99,7 +99,6 @@ namespace Bangazon.Controllers
         {
             //new method for when the user clicks on the 'Add to Order' button on the product details view
 
-
             if (id == null)
             {
                 return NotFound();
@@ -119,7 +118,7 @@ namespace Bangazon.Controllers
 
 
             //ternary statement to see if order is empty, if so create a new instance of an order 
-            if (isOrder == null)
+            if (isOrder == null || isOrder.Count() == 0)
             {
                
             Order newOrder = new Order
