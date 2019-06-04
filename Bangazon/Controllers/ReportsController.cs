@@ -25,6 +25,8 @@ namespace Bangazon.Controllers
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
+        //gets go here
+
         // GET: Orders/ReportIncompleteOrders
         public async Task<IActionResult> ReportIncompleteOrders()
         {
