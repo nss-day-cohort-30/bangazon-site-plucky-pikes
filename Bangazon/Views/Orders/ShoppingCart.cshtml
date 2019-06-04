@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Bangazon.Models.Order>
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<h1>Shopping Cart</h1>
+
+<div>
+    @foreach (var item in Model)
+    {
+        <h3>Order @Html.DisplayFor(model => item.OrderId)</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    @for (int i = 0; i < 1; i++)
+                    {
+                        <th>@Html.DisplayNameFor(model => item.OrderProducts.First().Product.Title)</th>
+                        <th>@Html.DisplayNameFor(model => item.OrderProducts.First().Product.Description)</th>
+                        <th>@Html.DisplayNameFor(model => item.OrderProducts.First().Product.Price)</th>
+                        <th>@Html.DisplayNameFor(model => item.OrderProducts.First().Product.ProductType.Label)</th>
+                        <th></th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in item.OrderProducts)
+                {
+                    <tr>
+                        <td><a asp-action="Details" asp-route-id="@product.ProductId">@Html.DisplayFor(p => product.Product.Title)</a></td>
+                        <td>@Html.DisplayFor(p => product.Product.Description)</td>
+                        <td>@Html.DisplayFor(p => product.Product.Price)</td>
+                        <td>@Html.DisplayFor(p => product.Product.ProductType.Label)</td>
+                        <td><a asp-action="" asp-route-id="@product.ProductId">Remove From Cart</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

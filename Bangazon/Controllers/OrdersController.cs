@@ -7,17 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Bangazon.Data;
 using Bangazon.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bangazon.Controllers
 {
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public OrdersController(ApplicationDbContext context)
+        public OrdersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
+
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Orders
         public async Task<IActionResult> Index()
@@ -53,8 +59,6 @@ namespace Bangazon.Controllers
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
             return View();
         }
-
-
 
 
         // POST: Orders/Create
@@ -161,6 +165,21 @@ namespace Bangazon.Controllers
             _context.Order.Remove(order);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Orders/ShoppingCart
+        public async Task<IActionResult> ShoppingCart()
+        {
+            var loggedInUser = await GetCurrentUserAsync();
+
+            var currentOpenOrder = _context.Order
+                .Include(o => o.User)
+                .Include(o => o.OrderProducts)
+                .ThenInclude(op => op.Product)
+                .ThenInclude(op => op.ProductType)
+                .Where(o => o.UserId == loggedInUser.Id.ToString() && o.PaymentTypeId == null && o.DateCompleted == null)
+                ;
+            return View(await currentOpenOrder.ToListAsync());
         }
 
         private bool OrderExists(int id)
