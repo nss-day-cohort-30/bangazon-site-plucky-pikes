@@ -28,8 +28,21 @@ namespace Bangazon.Controllers
         // GET: Orders
         public async Task<IActionResult> Multiples()
         {
-            var applicationDbContext = _context.Order.Include(o => o.PaymentType).Include(o => o.User);
-            return View(await applicationDbContext.ToListAsync());
+            List<ApplicationUser> usersWithMultiples = new List<ApplicationUser>();
+
+            var usersWithIncompleteOrders = _context.ApplicationUsers
+                .Include(u => u.Orders)
+                .Where(u => u.Orders.Any(o => o.DateCompleted == null))
+                .ToList();
+
+            var usersWithMultipleIncompleteOrders = usersWithIncompleteOrders
+                .Where(u => u.Orders
+                    .Where(o => o.DateCompleted == null)
+                    .Count() > 1)
+                .ToList()
+                .OrderByDescending(u => u.Orders.Where(o => o.DateCompleted == null).Count())
+                .ToList();
+            return View(usersWithMultipleIncompleteOrders);
         }
         //gets go here
 

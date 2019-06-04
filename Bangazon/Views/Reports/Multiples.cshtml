@@ -1,43 +1,40 @@
-﻿@model IEnumerable<Bangazon.Models.Order>
+﻿@model IEnumerable<Bangazon.Models.ApplicationUser>
 
 @{
     ViewData["Title"] = "Multiples";
 }
 
-<h1>Index</h1>
+<h1>Multiple Orders Report</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
+                @Html.DisplayNameFor(model => model.FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User.FirstName)
+                @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User.LastName)
+                @Html.DisplayNameFor(model => model.Orders)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateCreated)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.LastName)
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @item.FirstName
+            </td>
+            <td>
+                @item.LastName
+            </td>
+            <td>
+                @item.Orders.Where(o => o.DateCompleted == null).ToList().Count()
+            </td>
+        </tr>
         }
     </tbody>
 </table>
