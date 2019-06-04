@@ -35,9 +35,9 @@ namespace Bangazon.Controllers
                 .Include(p => p.User).ToListAsync();
             if (!String.IsNullOrEmpty(searchString))
             {
-                 productList = productList.Where(p => p.Title.Contains(searchString)
-                                       || p.Description.Contains(searchString)).ToList();
-            } 
+                productList = productList.Where(p => p.Title.Contains(searchString)
+                                      || p.Description.Contains(searchString)).ToList();
+            }
 
             var applicationDbContext = productList
                 .OrderByDescending(p => p.DateCreated)
@@ -53,6 +53,19 @@ namespace Bangazon.Controllers
                 .Include(p => p.ProductType)
                 .Include(p => p.User)
                 .Where(p => p.ProductTypeId == id);
+            if (products == null)
+            {
+                return NotFound();
+            }
+            return View(await products.ToListAsync());
+        }
+
+        public async Task<IActionResult> MyProducts()
+        {
+            var loggedInUser = await GetCurrentUserAsync();
+            var products = _context.Product
+                .Include(p => p.ProductType)
+                .Where(p => p.UserId == loggedInUser.Id);
             if (products == null)
             {
                 return NotFound();
@@ -141,6 +154,8 @@ namespace Bangazon.Controllers
                 return NotFound();
             }
 
+            ModelState.Remove("UserId");
+
             if (ModelState.IsValid)
             {
                 try
@@ -191,10 +206,38 @@ namespace Bangazon.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var loggedInUser = await GetCurrentUserAsync();
             var product = await _context.Product.FindAsync(id);
-            _context.Product.Remove(product);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            if (product.UserId == loggedInUser.Id)
+            {
+                Product freeProduct = null;
+                foreach (var item in _context.OrderProduct)
+                {
+                    if (product.ProductId != item.ProductId)
+                    {
+                        freeProduct = product;
+                    }
+                }
+
+                if (freeProduct != null)
+                {
+                    _context.Product.Remove(freeProduct);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(MyProducts));
+                }
+                else
+                {
+                    //error product in order
+                    return View("UserError", product);
+                }
+            }
+            else
+            {
+                //error
+                return View("UserError", product);
+            }
+
         }
 
         private bool ProductExists(int id)
