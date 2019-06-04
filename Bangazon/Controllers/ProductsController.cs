@@ -76,6 +76,7 @@ namespace Bangazon.Controllers
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
@@ -85,6 +86,7 @@ namespace Bangazon.Controllers
                 .Include(p => p.ProductType)
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
+
             if (product == null)
             {
                 return NotFound();
@@ -93,6 +95,94 @@ namespace Bangazon.Controllers
             return View(product);
         }
 
+        public async Task<IActionResult> PlaceOrder(int? id)
+        {
+            //new method for when the user clicks on the 'Add to Order' button on the product details view
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // variable capturing the current user to be used when a newOrder instance is created on line 127
+
+            var loggedInUser = await GetCurrentUserAsync();
+
+
+            var isOrder = _context.Order.Where(o => o.UserId == loggedInUser.Id && o.PaymentTypeId == null);
+             
+            // both newOrderId and WorkingOrder initially set to null to capture variable 
+            int? newOrderId = null;
+
+            Order WorkingOrder = null;
+
+
+            //ternary statement to see if order is empty, if so create a new instance of an order 
+            if (isOrder == null || isOrder.Count() == 0)
+            {
+               
+            Order newOrder = new Order
+            {
+                UserId = loggedInUser.Id.ToString()
+            };
+
+            _context.Order.Add(newOrder);
+            await _context.SaveChangesAsync();
+
+            newOrderId = newOrder.OrderId;
+                WorkingOrder = newOrder;
+            } 
+            else
+            {
+                foreach(Order item in isOrder) {
+
+                    newOrderId = item.OrderId;
+                    WorkingOrder = item;
+                }
+               
+            }
+            
+            var product = await _context.Product
+                .Include(p => p.ProductType)
+                .FirstOrDefaultAsync(m => m.ProductId == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+
+            var productQty = product.Quantity;
+
+
+            // new instance of a join table with productId and newOrderId
+
+            OrderProduct ProductOrder = new OrderProduct
+            {
+                OrderId = (int)newOrderId,
+                ProductId = product.ProductId
+            };
+
+            //_context goes into database and adds the new ProductOrder to the OrderProduct table
+            _context.OrderProduct.Add(ProductOrder);
+
+
+            //saves changes
+            await _context.SaveChangesAsync();
+
+
+            //updates quantity of product minus one
+            product.Quantity = product.Quantity -1;
+
+
+
+            //goes into database and updates with new product
+            _context.Update(product);
+            await _context.SaveChangesAsync();
+
+
+            //return View("../Orders/Details", WorkingOrder);
+            return RedirectToAction("Details", "Products", new { id });
+        }
         // GET: Products/Create
         public IActionResult Create()
         {
@@ -118,6 +208,8 @@ namespace Bangazon.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            
 
             ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label", product.ProductTypeId);
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", product.UserId);
