@@ -27,14 +27,15 @@ namespace Bangazon.Controllers
 
         //gets go here
 
-        // GET: Orders/ReportIncompleteOrders
+        // GET: Reports/ReportIncompleteOrders
         public async Task<IActionResult> ReportIncompleteOrders()
         {
             var applicationDbContext = _context.Order
                 .Include(o => o.User)
                 .Include(o => o.OrderProducts)
                 .ThenInclude(op => op.Product)
-                .ThenInclude(p => p.ProductType)
+                //.ThenInclude(p => p.ProductType)
+                .Where(item => item.DateCompleted == null)
                 ;
             return View(await applicationDbContext.ToListAsync());
         }
