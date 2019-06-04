@@ -38,6 +38,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">View Cart</a>
                         </li>
+
                         <li class="dropdown nav-item">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reports<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
@@ -46,6 +47,7 @@
                                     <li>@Html.ActionLink("linkText", "Action", "Controller")</li>*@
                                 <li>@Html.ActionLink("Incomplete Orders", "ReportIncompleteOrders", "Reports")</li>
                             </ul>
+
                         </li>
                         <li>
                             <form asp-action="Index" asp-controller="Products" method="get">
