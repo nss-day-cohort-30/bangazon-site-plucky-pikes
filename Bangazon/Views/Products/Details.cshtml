@@ -71,6 +71,6 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ProductId">Edit</a> |
     <a asp-action="Index">Back to List</a> | 
-    <a asp-action="Index" asp-route-id="@Model.">add to order</a> | 
+  
     <a  asp-route-id="@Model.ProductId" asp-action="PlaceOrder" class="btn @(Model.Quantity > 0 ? "btn-primary" : "btn-default disabled")">Add to Order</a>
 </div>

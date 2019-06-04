@@ -129,7 +129,11 @@ namespace Bangazon.Controllers
                 return NotFound();
             }
 
-            int numOrdered = _context.OrderProduct.Where(op => op.ProductId == product.ProductId).Count();
+            //int numOrdered = _context.OrderProduct.Where(op => op.ProductId == product.ProductId).Count();
+
+
+            var productQty = product.Quantity;
+
 
             OrderProduct ProductOrder = new OrderProduct
             {
@@ -141,7 +145,13 @@ namespace Bangazon.Controllers
 
             await _context.SaveChangesAsync();
 
-            product.Quantity -= numOrdered;
+
+            product.Quantity = product.Quantity -1;
+
+
+            _context.Update(product);
+            await _context.SaveChangesAsync();
+
 
             //return View("../Orders/Details", WorkingOrder);
             return RedirectToAction("Details", "Products", new { id });
@@ -171,6 +181,8 @@ namespace Bangazon.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            
 
             ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label", product.ProductTypeId);
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", product.UserId);
