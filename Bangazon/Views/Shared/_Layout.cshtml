@@ -13,7 +13,7 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
               crossorigin="anonymous"
-              integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE="/>
+              integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" />
     </environment>
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -38,8 +38,14 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">View Cart</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="MyProducts">My Products</a>
+                        <li class="dropdown nav-item">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reports<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                @*To insert a new element in the dropdown, copy the line below, insert into appropriate location in menu, and
+                                    change to appropriate link text and action.
+                                    <li>@Html.ActionLink("linkText", "Action", "Controller")</li>*@
+                                <li>@Html.ActionLink("Incomplete Orders", "ReportIncompleteOrders", "Reports")</li>
+                            </ul>
                         </li>
                         <li>
                             <form asp-action="Index" asp-controller="Products" method="get">
