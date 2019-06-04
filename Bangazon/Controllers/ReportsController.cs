@@ -25,6 +25,11 @@ namespace Bangazon.Controllers
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        //gets go here
+        // GET: Orders
+        public async Task<IActionResult> Multiples()
+        {
+            var applicationDbContext = _context.Order.Include(o => o.PaymentType).Include(o => o.User);
+            return View(await applicationDbContext.ToListAsync());
+        }
     }
 }
