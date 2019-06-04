@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Bangazon.Models.Order>
+
+@{
+    ViewData["Title"] = "Report: Incomplete Orders";
+}
+
+<h1>Report: Incomplete Orders</h1>
+
+@foreach (var item in Model)
+{
+    <h2>@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</h2>
+    <hr />
+    <h3>Order @Html.DisplayFor(modelItem => item.OrderId)</h3>
+    <ol>
+        @foreach (var product in item.OrderProducts)
+        {
+            <li>@Html.DisplayFor(modelItem => product.Product.Title) (@Html.DisplayFor(modelItem => product.Product.ProductType.Label))</li>
+        }
+    </ol>
+}

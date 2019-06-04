@@ -26,5 +26,18 @@ namespace Bangazon.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         //gets go here
+
+        // GET: Reports/ReportIncompleteOrders
+        public async Task<IActionResult> ReportIncompleteOrders()
+        {
+            var applicationDbContext = _context.Order
+                .Include(o => o.User)
+                .Include(o => o.OrderProducts)
+                .ThenInclude(op => op.Product)
+                .ThenInclude(p => p.ProductType)
+                .Where(item => item.DateCompleted == null)
+                ;
+            return View(await applicationDbContext.ToListAsync());
+        }
     }
 }
