@@ -32,27 +32,14 @@ namespace Bangazon.Controllers
 
             List<Product> productList = await _context.Product
                 .Include(p => p.ProductType)
-                
                 .Include(p => p.User)
-                .Where(p => p.City != null)
                 .ToListAsync();
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                //productList = productList.Where(p => p.Title.Contains(searchString)).ToList();
-                //productList = productList.Where(p => p.Description.Contains(searchString)).ToList();
-                try
-                {
-
-                productList = productList.Where(p => p.City.Contains(searchString)).ToList();
-                }
-                catch (Exception ex)
-                { }
-              
-
+                productList = productList.Where(p => p.Title.Contains(searchString)
+                                      || p.Description.Contains(searchString)).ToList();
             }
-
-
 
             var applicationDbContext = productList
                 .OrderByDescending(p => p.DateCreated)
@@ -62,7 +49,43 @@ namespace Bangazon.Controllers
             return View(applicationDbContext);
         }
 
-        public async Task<IActionResult> GetProductsByCategory(int id)
+
+
+
+        public async Task<IActionResult> CitySearch(string searchString)
+        {
+            ViewData["CurrentFilter"] = searchString;
+
+            List<Product> productList = await _context.Product
+                .Include(p => p.ProductType)
+
+                .Include(p => p.User)
+                .Where(p => p.City != null)
+                .ToListAsync();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+            
+                try
+                {
+
+                    productList = productList.Where(p => p.City.Contains(searchString)).ToList();
+                }
+                catch (Exception ex)
+                { }
+
+
+            }
+
+            var applicationDbContext = productList
+               .OrderByDescending(p => p.DateCreated)
+               //Shows specified amount
+               .Take(20);
+
+            return View(applicationDbContext);
+        }
+
+            public async Task<IActionResult> GetProductsByCategory(int id)
         {
             var products = _context.Product
                 .Include(p => p.ProductType)

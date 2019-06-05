@@ -59,10 +59,10 @@
                                     </p>
                                 </div>
                             </form>
-                            <form asp-action="Index" asp-controller="Products" method="get">
+                            <form asp-action="CitySearch" asp-controller="Products" method="get">
                                 <div class="form-actions no-color">
                                     <p>
-                                        Search City: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                                     <input type="hidden" name="SearchString" value="@ViewData["currentFilter"]" />
                                         <input type="submit" value="Search city" class="btn btn-default" />
                                     </p>
                                 </div>
