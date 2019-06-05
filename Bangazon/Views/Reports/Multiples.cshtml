@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Bangazon.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Multiples";
+}
+
+<h1>Multiple Orders Report</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Orders)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @item.FirstName
+            </td>
+            <td>
+                @item.LastName
+            </td>
+            <td>
+                @item.Orders.Where(o => o.DateCompleted == null).ToList().Count()
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
