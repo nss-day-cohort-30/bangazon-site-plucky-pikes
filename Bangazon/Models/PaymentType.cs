@@ -1,3 +1,4 @@
+using Bangazon.Models.CustomValidation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,6 +26,12 @@ namespace Bangazon.Models
         [StringLength(20)]
         [Display(Name = "Account Number")]
         public string AccountNumber { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        [CustomDateValidator]
+        [Display(Name = "Expiration Date")]
+        public DateTime ExpirationDate { get; set; }
 
         [Required]
         public string UserId { get; set; }
