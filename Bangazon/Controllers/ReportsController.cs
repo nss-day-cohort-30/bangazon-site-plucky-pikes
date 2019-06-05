@@ -32,18 +32,32 @@ namespace Bangazon.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        public async Task<IActionResult> GetOrdersByTopFiveProductTypesIncompleted(int id)
+        public async Task<IActionResult> GetOrdersByTopFiveProductTypesIncompleted()
         {
-            var orders = _context.Order
-                .Include(o => o.OrderProducts)
-                .ThenInclude(p => p.Product)
-                .ThenInclude(p => p.ProductType);
-                //.Where(p => p.ProductTypeId == id);
-            if (orders == null)
-            {
-                return NotFound();
-            }
-            return View(await orders.ToListAsync());
+            var products = _context.Product
+                .Include(p => p.OrderProducts)
+                .ThenInclude(op => op.Order)
+                .Where(p => p.OrderProducts.Any(op => op.Order.DateCompleted == null))
+                .Include(p => p.ProductType);
+
+            var abandonedProductTypes = products
+                .GroupBy(p => p.ProductTypeId,
+                         p => p.ProductType,
+                        (id, type) => new AbandonedProductTypes
+                            {
+                                ProductType = type.First(),
+                                Count = type.Count()
+
+                            })
+                 .OrderByDescending(pt => pt.Count)
+                 .Take(5)
+                 ;
+
+            //if (orders == null)
+            //{
+            //    return NotFound();
+            //}
+            return View(abandonedProductTypes);
         }
     }
 }
