@@ -43,6 +43,9 @@ namespace Bangazon.Controllers
             var order = await _context.Order
                 .Include(o => o.PaymentType)
                 .Include(o => o.User)
+                .Include(o => o.OrderProducts)
+                .ThenInclude(op => op.Product)
+                .ThenInclude(op => op.ProductType)
                 .FirstOrDefaultAsync(m => m.OrderId == id);
             if (order == null)
             {
@@ -183,25 +186,19 @@ namespace Bangazon.Controllers
         }
 
         //GET: Orders/History
+        [Authorize]
         public async Task<IActionResult> OrderHistory()
         {
             var loggedInUser = await GetCurrentUserAsync();
 
-            if (loggedInUser != null)
-            {
-                var orderHistory = _context.Order
-                    .Include(o => o.User)
-                    .Include(o => o.OrderProducts)
-                    .ThenInclude(op => op.Product)
-                    .ThenInclude(op => op.ProductType)
-                    .Where(o => o.UserId == loggedInUser.Id.ToString() && o.DateCompleted != null)
-                    ;
-                return View(await orderHistory.ToListAsync());
-            }
-            else
-            {
-                return RedirectToAction("/Account/Login", "Identity");
-            }
+            var orderHistory = _context.Order
+                .Include(o => o.User)
+                .Include(o => o.OrderProducts)
+                .ThenInclude(op => op.Product)
+                .ThenInclude(op => op.ProductType)
+                .Where(o => o.UserId == loggedInUser.Id.ToString() && o.DateCompleted != null)
+                ;
+            return View(await orderHistory.ToListAsync());
         }
 
         private bool OrderExists(int id)
