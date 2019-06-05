@@ -12,15 +12,15 @@ namespace Bangazon.Models.CustomValidation
         {
             // your validation logic
             // if (value >= Convert.ToDateTime("01/10/1900").ToString() && value <= Convert.ToDateTime("01/12/2008"))
-            DateTime pastDate = new DateTime(1900, 1, 1);
+            //DateTime pastDate = new DateTime(1900, 1, 1);
             DateTime newValue = Convert.ToDateTime(value);
-            if (DateTime.Compare(pastDate, newValue) > 0 && DateTime.Compare(DateTime.Now, newValue) < 0)
+            if (DateTime.Compare(DateTime.Now, newValue) < 0)
             {
                 return ValidationResult.Success;
             }
             else
             {
-                return new ValidationResult("Date is not in given range.");
+                return new ValidationResult("Expiration date is in the past.");
             }
         }
     }
