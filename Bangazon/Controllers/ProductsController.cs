@@ -40,6 +40,7 @@ namespace Bangazon.Controllers
                 productList = productList.Where(p => p.Title.Contains(searchString)
                                       || p.Description.Contains(searchString)).ToList();
             }
+          
 
             var applicationDbContext = productList
                 .OrderByDescending(p => p.DateCreated)
@@ -72,7 +73,9 @@ namespace Bangazon.Controllers
                     productList = productList.Where(p => p.City.Contains(searchString)).ToList();
                 }
                 catch (Exception ex)
-                { }
+                {
+
+                }
 
 
             }
