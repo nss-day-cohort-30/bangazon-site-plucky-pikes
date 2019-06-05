@@ -53,9 +53,9 @@ namespace Bangazon.Controllers
 
 
 
-        public async Task<IActionResult> CitySearch(string searchString)
+        public async Task<IActionResult> CitySearch(string CitySearchString)
         {
-            ViewData["CurrentFilter"] = searchString;
+            ViewData["currentCityFilter"] = CitySearchString;
 
             List<Product> productList = await _context.Product
                 .Include(p => p.ProductType)
@@ -64,13 +64,13 @@ namespace Bangazon.Controllers
                 .Where(p => p.City != null)
                 .ToListAsync();
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (!String.IsNullOrEmpty(CitySearchString))
             {
             
                 try
                 {
 
-                    productList = productList.Where(p => p.City.Contains(searchString)).ToList();
+                    productList = productList.Where(p => p.City.Contains(CitySearchString)).ToList();
                 }
                 catch (Exception ex)
                 {
