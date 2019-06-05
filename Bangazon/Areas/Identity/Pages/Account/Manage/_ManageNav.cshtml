@@ -13,6 +13,9 @@
             <a class="nav-link" asp-area="" asp-controller="Products" asp-action="MyProducts">My Products</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Orders" asp-action="OrderHistory">View Order History</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a>
         </li>
         @if (hasExternalLogins)

@@ -70,15 +70,15 @@ namespace Bangazon.Controllers
         {
             ModelState.Remove("User");
 
-                if (ModelState.IsValid)
-                {
-                    _context.Add(order);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                ViewData["PaymentTypeId"] = new SelectList(_context.PaymentType, "PaymentTypeId", "AccountNumber", order.PaymentTypeId);
-                ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", order.UserId);
-                return View(order);
+            if (ModelState.IsValid)
+            {
+                _context.Add(order);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["PaymentTypeId"] = new SelectList(_context.PaymentType, "PaymentTypeId", "AccountNumber", order.PaymentTypeId);
+            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", order.UserId);
+            return View(order);
         }
 
         // GET: Orders/Edit/5
@@ -180,6 +180,28 @@ namespace Bangazon.Controllers
                 .Where(o => o.UserId == loggedInUser.Id.ToString() && o.PaymentTypeId == null && o.DateCompleted == null)
                 ;
             return View(await currentOpenOrder.ToListAsync());
+        }
+
+        //GET: Orders/History
+        public async Task<IActionResult> OrderHistory()
+        {
+            var loggedInUser = await GetCurrentUserAsync();
+
+            if (loggedInUser != null)
+            {
+                var orderHistory = _context.Order
+                    .Include(o => o.User)
+                    .Include(o => o.OrderProducts)
+                    .ThenInclude(op => op.Product)
+                    .ThenInclude(op => op.ProductType)
+                    .Where(o => o.UserId == loggedInUser.Id.ToString() && o.DateCompleted != null)
+                    ;
+                return View(await orderHistory.ToListAsync());
+            }
+            else
+            {
+                return RedirectToAction("/Account/Login", "Identity");
+            }
         }
 
         private bool OrderExists(int id)
