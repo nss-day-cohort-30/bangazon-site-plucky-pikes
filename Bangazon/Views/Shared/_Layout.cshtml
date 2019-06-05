@@ -51,11 +51,20 @@
 
                         </li>
                         <li>
+
                             <form asp-action="Index" asp-controller="Products" method="get">
                                 <div class="form-actions no-color">
                                     <p>
                                         Search Products: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
                                         <input type="submit" value="Search" class="btn btn-default" />
+                                    </p>
+                                </div>
+                            </form>
+                            <form asp-action="CitySearch" asp-controller="Products" method="get">
+                                <div class="form-actions no-color">
+                                    <p>
+                                     <input type="text" name="CitySearchString" value="@ViewData["currentCityFilter"]" />
+                                        <input type="submit" value="Search by City" class="btn btn-default" />
                                     </p>
                                 </div>
                             </form>
