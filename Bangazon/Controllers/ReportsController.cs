@@ -26,6 +26,7 @@ namespace Bangazon.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Orders
+
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Order.Include(o => o.PaymentType).Include(o => o.User);
@@ -44,11 +45,11 @@ namespace Bangazon.Controllers
                 .GroupBy(p => p.ProductTypeId,
                          p => p.ProductType,
                         (id, type) => new AbandonedProductTypes
-                            {
-                                ProductType = type.First(),
-                                Count = type.Count()
+                        {
+                            ProductType = type.First(),
+                            Count = type.Count()
 
-                            })
+                        })
                  .OrderByDescending(pt => pt.Count)
                  .Take(5)
                  ;
@@ -58,6 +59,40 @@ namespace Bangazon.Controllers
             //    return NotFound();
             //}
             return View(abandonedProductTypes);
+        }
+
+        public async Task<IActionResult> Multiples()
+        {
+            List<ApplicationUser> usersWithMultiples = new List<ApplicationUser>();
+
+            var usersWithIncompleteOrders = _context.ApplicationUsers
+                .Include(u => u.Orders)
+                .Where(u => u.Orders.Any(o => o.DateCompleted == null))
+                .ToList();
+
+            var usersWithMultipleIncompleteOrders = usersWithIncompleteOrders
+                .Where(u => u.Orders
+                    .Where(o => o.DateCompleted == null)
+                    .Count() > 1)
+                .ToList()
+                .OrderByDescending(u => u.Orders.Where(o => o.DateCompleted == null).Count())
+                .ToList();
+            return View(usersWithMultipleIncompleteOrders);
+        }
+        //gets go here
+
+        // GET: Reports/ReportIncompleteOrders
+        public async Task<IActionResult> ReportIncompleteOrders()
+        {
+            var applicationDbContext = _context.Order
+                .Include(o => o.User)
+                .Include(o => o.OrderProducts)
+                .ThenInclude(op => op.Product)
+                .ThenInclude(p => p.ProductType)
+                .Where(item => item.DateCompleted == null)
+                ;
+            return View(await applicationDbContext.ToListAsync());
+
         }
     }
 }
